@@ -1,1 +1,1 @@
-require 'port_a_query'
+require 'port-a-query'
