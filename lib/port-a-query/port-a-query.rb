@@ -17,7 +17,7 @@ module PortAQuery
   protected
   
   def self.adapter
-    ActiveRecord::Base.configurations[RAILS_ENV]['adapter']
+    ActiveRecord::Base.configurations[Rails.env]['adapter']
   end
   
   def self.adapter_class
