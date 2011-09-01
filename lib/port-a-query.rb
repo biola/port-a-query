@@ -1,4 +1,40 @@
-require 'port-a-query/port-a-query'
-require 'port-a-query/default'
-require 'port-a-query/sqlite3'
-require 'port-a-query/mysql'
+require 'port-a-query/adapters/default'
+require 'port-a-query/adapters/sqlite3'
+require 'port-a-query/adapters/mysql'
+
+module PortAQuery
+
+  # Symbols should be used for field names, everything else will be quoted as a string
+
+  def self.method_missing(name, *args)
+
+    adapter_class = self.adapter_class
+
+    if adapter_class.respond_to?(name)
+      adapter_class.send(name, *args)
+    else
+      Default.send(name, *args)
+    end
+
+  end
+
+  protected
+  
+  def self.adapter
+    @adapter ||= ActiveRecord::Base.configurations[Rails.env]['adapter']
+  end
+  
+  def self.adapter_class
+  
+    case self.adapter.to_sym
+      when :sqlite3
+        return SqLite3
+      when :mysql
+        return MySql
+      when :mysql2
+        return MySql
+    end
+  
+  end
+
+end
