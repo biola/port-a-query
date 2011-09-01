@@ -3,15 +3,14 @@ require 'port-a-query/adapters/sqlite3'
 require 'port-a-query/adapters/mysql'
 
 module PortAQuery
-
   # Symbols should be used for field names, everything else will be quoted as a string
+
+  @adapter = nil
 
   def self.method_missing(name, *args)
 
-    adapter_class = self.adapter_class
-
-    if adapter_class.respond_to?(name)
-      adapter_class.send(name, *args)
+    if adapter.respond_to?(name)
+      adapter.send(name, *args)
     else
       Default.send(name, *args)
     end
@@ -21,20 +20,18 @@ module PortAQuery
   protected
   
   def self.adapter
-    @adapter ||= ActiveRecord::Base.configurations[Rails.env]['adapter']
-  end
+    return @adapter unless @adapter.nil?
   
-  def self.adapter_class
+    adapter_name = ActiveRecord::Base.configurations[Rails.env]['adapter']
   
-    case self.adapter.to_sym
-      when :sqlite3
-        return SqLite3
-      when :mysql
-        return MySql
-      when :mysql2
-        return MySql
+    @adapter = case adapter_name.to_s.to_sym
+    when :sqlite3
+      SqLite3
+    when :mysql
+      MySql
+    when :mysql2
+      MySql
     end
-  
   end
 
 end
