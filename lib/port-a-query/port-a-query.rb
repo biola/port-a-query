@@ -27,6 +27,8 @@ module PortAQuery
         return SqLite3
       when :mysql
         return MySql
+      when :mysql2
+        return MySql
     end
   
   end
