@@ -13,5 +13,5 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = false
   s.author = "Adam Crownoble"
   s.email = "adam@obledesign.com"
-  s.homepage = "http://obledesign.com"
+  s.homepage = "https://github.com/biola/port-a-query"
 end
